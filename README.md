@@ -1,0 +1,2 @@
+# pubsubhub
+Javascript pubsub
