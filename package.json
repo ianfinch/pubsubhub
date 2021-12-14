@@ -1,6 +1,7 @@
 {
-  "name": "pubsubhub",
-  "version": "0.0.1",
+  "name": "@guzo/pubsubhub",
+  "version": "0.0.2",
+  "homepage": "https://github.com/ianfinch/pubsubhub#readme",
   "description": "A pub/sub hub for the browser",
   "main": "pubsubhub.js",
   "type": "module",
@@ -12,5 +13,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ian Finch",
+  "url": "https://ian-says.com",
   "license": "Apache-2.0"
 }
