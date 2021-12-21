@@ -1,6 +1,6 @@
 {
   "name": "@guzo/pubsubhub",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/ianfinch/pubsubhub#readme",
   "description": "A pub/sub hub for the browser",
   "main": "pubsubhub.js",
