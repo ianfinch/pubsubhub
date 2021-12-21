@@ -110,5 +110,6 @@ const register = name => {
 };
 
 export default {
+    log: targetState => { logging = targetState; },
     register
 };
