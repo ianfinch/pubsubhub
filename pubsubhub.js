@@ -26,12 +26,14 @@ const guid = () => {
 
 /**
  * Subscribe to a topic, by supplying a callback to handle any published events
+ *
+ * Pass an optional offset to use (otherwise, default to new messages)
  */
 const subscribe = id => {
 
     const name = participants[id];
 
-    return (topic, callback) => {
+    return (topic, callback, initialOffset = false) => {
 
         if (!topics[topic]) {
             topics[topic] = [];
@@ -41,8 +43,13 @@ const subscribe = id => {
             subscribers[name] = {};
         }
 
-        subscribers[name][topic] = { callback, offset: topics[topic].length };
+        if (initialOffset === false) {
+            initialOffset = topics[topic].length;
+        }
+
+        subscribers[name][topic] = { callback, offset: initialOffset };
         log("[SUBSCRIBE]", topic, "->", name);
+        sendToSubscribers(topic);
     };
 };
 
@@ -57,6 +64,22 @@ const unsubscribe = id => {
         delete subscribers[name][topic];
         log("[UNSUBSCRIBE]", topic, "--X-->", name);
     };
+};
+
+/**
+ * Notify subscribers of new messages
+ */
+const sendToSubscribers = topic => {
+
+    Object.values(subscribers).forEach(subscriber => {
+
+        if (subscriber[topic] && subscriber[topic].callback) {
+            while(subscriber[topic].offset < topics[topic].length) {
+                subscriber[topic].callback(topics[topic][subscriber[topic].offset]);
+                subscriber[topic].offset = subscriber[topic].offset + 1;
+            }
+        }
+    });
 };
 
 /**
@@ -81,15 +104,7 @@ const publish = id => {
         }
 
         topics[topic].push(payload);
-        Object.values(subscribers).forEach(subscriber => {
-
-            if (subscriber[topic] && subscriber[topic].callback) {
-                while(subscriber[topic].offset < topics[topic].length) {
-                    subscriber[topic].callback(topics[topic][subscriber[topic].offset]);
-                    subscriber[topic].offset = subscriber[topic].offset + 1;
-                }
-            }
-        });
+        sendToSubscribers(topic);
     };
 };
 
